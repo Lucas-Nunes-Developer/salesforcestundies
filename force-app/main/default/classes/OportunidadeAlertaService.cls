@@ -1,6 +1,7 @@
 public class OportunidadeAlertaService {
 
     public static void gerarAlertas() {
+
         // Buscar oportunidades que se encaixam no critério de risco
         List<Opportunity> oportunidadesRisco = [
             SELECT Id, Name 
@@ -10,10 +11,13 @@ public class OportunidadeAlertaService {
                 AND CloseDate <= :Date.today().addDays(7)
         ];
 
+        // Parada caso não exista valor
         if (oportunidadesRisco.isEmpty()) return;
 
+        // Inicia uma lista vazia do obj Alert
         List<Alert__c> alertas = new List<Alert__c>();
 
+        // Inicia o Loop para cada oportunidade encontrada
         for (Opportunity opp : oportunidadesRisco) {
             Alert__c alerta = new Alert__c();
             alerta.Name = 'Risco de Perda - ' + opp.Name;
